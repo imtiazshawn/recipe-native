@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, Pressable, Image, Animated } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MasonryList from '@react-native-seoul/masonry-list';
+import { useNavigation } from '@react-navigation/native';
 
 import Loader from './Loader';
 
 export default function Recipe({ meals, categories }) {
+  const navigation = useNavigation();
+
   return (
     <View className='mx-4 space-y-3'>
       <Text style={{ fontSize: hp(3) }} className='text-neutral-600 font-semibold'>Recipe</Text>
@@ -19,11 +22,8 @@ export default function Recipe({ meals, categories }) {
                 keyExtractor={(item) => item.idMeal}
                 numColumns={2}
                 showsVerticalScrollIndicator={false}
-                renderItem={({item, i}) => <RecipeCard item={item} index={i} />}
-                // refreshing={isLoadingNext}
-                // onRefresh={() => refetch({first: ITEM_CNT})}
+                renderItem={({item, i}) => <RecipeCard item={item} index={i} navigation={navigation} />}
                 onEndReachedThreshold={0.1}
-                // onEndReached={() => loadNext(ITEM_CNT)}
             />
         )}
       </View>
@@ -31,7 +31,7 @@ export default function Recipe({ meals, categories }) {
   )
 }
 
-const RecipeCard = ({ item, index }) => {
+const RecipeCard = ({ item, index, navigation }) => {
     const [fadeIn] = useState(new Animated.Value(0));
 
     useEffect(() => {
@@ -53,6 +53,7 @@ const RecipeCard = ({ item, index }) => {
                   justifyContent: 'center',
                   marginBottom: 4
                 }}
+                onPress={() => navigation.navigate('RecipeDetail', {...item})}
             >
                 <Image
                 source={{ uri: item.strMealThumb }}
