@@ -19,7 +19,7 @@ const WelcomeScreen = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFD700', padding: hp(5) }}>
+    <View className='flex-1 justify-center items-center bg-amber-500' style={{ padding: hp(5) }}>
       <StatusBar style='light' />
 
       {/* Logo  */}

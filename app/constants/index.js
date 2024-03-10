@@ -13,7 +13,27 @@ export const categoryData = [
     },
 ];
 
-export const mealDate = [
+export const mealData = [
+    {
+        name: 'Shaksura',
+        image: 'https://www.themealdb.com/images/media/meals/g373701551450225.png'
+    },
+    {
+        name: 'Shaksura',
+        image: 'https://www.themealdb.com/images/media/meals/g373701551450225.png'
+    },
+    {
+        name: 'Shaksura',
+        image: 'https://www.themealdb.com/images/media/meals/g373701551450225.png'
+    },
+    {
+        name: 'Shaksura',
+        image: 'https://www.themealdb.com/images/media/meals/g373701551450225.png'
+    },
+    {
+        name: 'Shaksura',
+        image: 'https://www.themealdb.com/images/media/meals/g373701551450225.png'
+    },
     {
         name: 'Shaksura',
         image: 'https://www.themealdb.com/images/media/meals/g373701551450225.png'

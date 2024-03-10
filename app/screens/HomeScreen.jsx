@@ -1,16 +1,57 @@
 import { View, Text, ScrollView, Image, TextInput } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { BellIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
+import axios from 'axios';
+
+import Recipe from '../components/Recipe';
 import Categories from '../components/Categories';
 
 export default function HomeScreen() {
   const [activeCategory, setActiveCategory] = useState('Beef');
+  const [categories, setCategories] = useState([]);
+  const [recipeData, setRecipeData] = useState([]);
+
+  useEffect(() => {
+    getCategories();
+    getRecipe();
+  }, []);
+
+  // Change Category
+  const handleChangeCategory = category => {
+    getRecipe(category);
+    setActiveCategory(category);
+    setRecipeData([]);
+  }
+
+  // Category API Fetch
+  const getCategories = async () => {
+    try {
+      const response = await axios.get('https://www.themealdb.com/api/json/v1/1/categories.php');
+      if (response && response.data) {
+        setCategories(response.data.categories);
+      }
+    } catch (error) {
+
+    }
+  }
+
+  // Category Data API Fetch
+  const getRecipe = async (category = 'beef') => {
+    try {
+      const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
+      if (response && response.data) {
+        setRecipeData(response.data.meals);
+      }
+    } catch (error) {
+
+    }
+  }
 
   return (
     <View className='flex-1 bg-white'>
-      <StatusBar style='dark'/>
+      <StatusBar style='dark' />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -19,7 +60,7 @@ export default function HomeScreen() {
       >
         {/* Avatar */}
         <View className='mx-4 flex-row justify-between items-center mb-2'>
-          <Image source={require('../../assets/images/avatar.png')} style={{ width: hp(5), height: hp(5)}} />
+          <Image source={require('../../assets/images/avatar.png')} style={{ width: hp(6.5), height: hp(6.5) }} />
           <BellIcon size={hp(5)} color='gray' />
         </View>
 
@@ -36,7 +77,7 @@ export default function HomeScreen() {
 
         {/* Searchbar */}
         <View className='mx-4 flex-row items-center rounded-full bg-black/5 p-[6px]'>
-          <TextInput 
+          <TextInput
             placeholder='Search any recipe'
             placeholderTextColor='gray'
             style={{ fontSize: hp(1.7) }}
@@ -49,7 +90,12 @@ export default function HomeScreen() {
 
         {/* Categories */}
         <View>
-          <Categories activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
+          {categories.length > 0 && <Categories categories={categories} activeCategory={activeCategory} handleChangeCategory={handleChangeCategory} />}
+        </View>
+
+        {/* Recipe */}
+        <View>
+          <Recipe meals={recipeData} categories={categories} />
         </View>
       </ScrollView>
     </View>
